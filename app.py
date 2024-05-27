@@ -29,3 +29,26 @@ responder = Agent(
     llm= model
     )
 
+classify_email = Task(
+    description= f"Classify the email {email}", 
+    agent= classifier,
+    expected_output= "One of these three options: 'important', 'casual', or 'spam'"
+
+)
+
+respond_to_email = Task(
+    description= f"Respond to the email {email}",
+    agent= responder,
+    expected_output= "a very concise response  to the email based on the importance provided by the 'classifier' agent."
+)
+
+crew = Crew(
+    agents= [classifier, responder],
+    tasks = [classify_email, respond_to_email],
+    verbose= 2,
+    process= Process.sequential
+)
+
+output = crew.kickoff()
+print(output)
+
