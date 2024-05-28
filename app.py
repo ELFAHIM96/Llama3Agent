@@ -50,6 +50,8 @@ crew = Crew(
     verbose= 2,
     process= Process.sequential
 )
+task1_output = classify_email.output.raw_output
+task2_output = respond_to_email.output.raw_output
 
 def parse_output(output: str) -> Dict[str, str]:
     try:
@@ -59,7 +61,8 @@ def parse_output(output: str) -> Dict[str, str]:
         return {"classification": "unknown", "response": output.strip()}
 output = crew.kickoff()
 
-print('hi')
+print(task1_output)
+print(task2_output)
 print(parse_output(output))
 
 
