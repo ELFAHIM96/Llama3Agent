@@ -14,7 +14,7 @@ initialize:
 push:
 	echo "pushing ..."
 	git add .
-	git commit -m "add crew function"
+	git commit -m "add some interaction beween agent and"
 	git push -u origin main
 readme:
 	@echo "Adding README.md to the repository..."
