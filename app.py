@@ -1,13 +1,20 @@
+
+import os
 from langchain_community.llms import Ollama
 from typing import Union
 from typing import Dict, List
 from crewai import Agent, Task, Crew, Process
+from crewai_tools import SerperDevTool
 import json
+
+
+os.environ["SERPER_API_KEY"] = "f6f24bddfe9ef74496a3d14f187677136d891dbf"
 model  = Ollama(model="llama3")
 
 email = "nigerian prince sending some gold"
 is_verbose = False
 
+search_tool = SerperDevTool()
 # Create  first agent
 
 classifier = Agent(
@@ -34,7 +41,8 @@ responder = Agent(
 classify_email = Task(
     description= f"Classify the email {email}", 
     agent= classifier,
-    expected_output= "One of these three options: 'important', 'casual', or 'spam'"
+    expected_output= "One of these three options: 'important', 'casual', or 'spam'",
+    tools= [search_tool]
 
 )
 
@@ -51,7 +59,7 @@ crew = Crew(
     process= Process.sequential
 )
 task1_output = classify_email.output.raw_output
-task2_output = respond_to_email.output.raw_output
+# task2_output = respond_to_email.output.raw_output
 
 def parse_output(output: str) -> Dict[str, str]:
     try:
