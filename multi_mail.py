@@ -2,6 +2,8 @@ import json
 from typing import Dict, List
 from crewai import Agent, Task, Crew, Process
 from langchain_community.llms import Ollama
+from human_interaction import human_interaction
+
 
 # Initialize the model
 model = Ollama(model="llama3")
@@ -32,7 +34,7 @@ def clean_output(output: str) -> str:
     return output.replace('**\n', '').replace('** \n', '').strip()
 
 # Function to classify and respond to multiple emails
-def process_emails(emails: List[str]) -> List[Dict[str, str]]:
+def process_emails(emails: List[str], enable_human_interaction: bool = False) -> List[Dict[str, str]]:
     responses = []
     for email in emails:
         classify_email = Task(
@@ -60,10 +62,16 @@ def process_emails(emails: List[str]) -> List[Dict[str, str]]:
         classify_output = clean_output(classify_email.output.raw_output)
         respond_output = clean_output(respond_to_email.output.raw_output)
         
-        responses.append({
-            'classification': classify_output,
-            'response': respond_output
-        })
+        if enable_human_interaction:
+            output = {'classification': classify_output, 'response': respond_output}
+            response = human_interaction(email, output)
+            responses.append(response)
+        else:
+            responses.append({
+                'email': email,
+                'classification': classify_output,
+                'response': respond_output
+            })
     
     return responses
 
@@ -76,7 +84,11 @@ if __name__ == "__main__":
         "Congratulations, you won a lottery"
     ]
 
+    # Enable or disable human interaction
+    enable_human_interaction = True  # Set to False to disable human interaction
+
     # Process the emails
-    results = process_emails(emails)
+    results = process_emails(emails, enable_human_interaction)
     for result in results:
         print(result)
+
