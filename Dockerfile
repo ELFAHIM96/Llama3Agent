@@ -1,21 +1,21 @@
 
-FROM alpine:3.10
+# Use the official Python image from the Docker Hub
+FROM python:3.10.14-slim
 
-# Install Python and pip
-RUN apk update && apk add --no-cache python3 \
-    && python3 -m ensurepip \
-    && pip3 install --no-cache --upgrade pip setuptools
+# Use the official Python image with version 3.10.14
+FROM python:3.10.14-slim
 
-WORKDIR /bin/src/app
+# Set the working directory in the container
+WORKDIR /app
 
-# Copy the requirements file first for better caching
-COPY requirements.txt /bin/src/app/
+# Copy the requirements.txt file into the container
+COPY requirements.txt .
 
-# Install dependencies
-RUN pip3 install -r /bin/src/app/requirements.txt
+# Install the dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
-COPY . /bin/src/app/
+# Copy the rest of the application code into the container
+COPY . .
 
-CMD ["python3", "app.py"]
-
+# Command to run the script
+CMD ["python", "multi_mail.py"]

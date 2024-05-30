@@ -1,4 +1,5 @@
 import json
+import requests
 from typing import Dict, List
 from crewai import Agent, Task, Crew, Process
 from langchain_community.llms import Ollama
@@ -6,7 +7,7 @@ from human_interaction import human_interaction
 
 
 # Initialize the model
-model = Ollama(model="llama3")
+model = Ollama(model="llama3", api_base_url="http://host.docker.internal:11434")
 
 # Define your email classifier agent
 classifier = Agent(
