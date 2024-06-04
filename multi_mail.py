@@ -7,13 +7,13 @@ from human_interaction import human_interaction
 
 
 # Initialize the model
-model = Ollama(model="llama3", api_base_url="http://host.docker.internal:11434")
+model = Ollama(model="llama3")
 
 # Define your email classifier agent
 classifier = Agent(
     role="email classifier",
     goal="accurately classify emails based on their importance. Give every email one of these ratings: important, casual, or spam",
-    backstory="You are an AI assistant whose only job is to classify emails accurately and honestly. Do not be afraid to give emails a bad rating if they are not important. Your job is to help the user manage their inbox",
+    backstory="You are an AI assistant whose only job is to classify emails accurately and honestly. Do not be afraid to give emails a bad rating if they are not important. Your job is to help the user manage their inbox.",
     verbose=False,
     allow_delegation=False,
     llm=model
